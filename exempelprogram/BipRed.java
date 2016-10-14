@@ -9,34 +9,62 @@
  */
 
 public class BipRed {
-    Kattio io;
+
+    private Kattio io;
+    private int[] xArray;
+    private int[] yArray;
+    private int x;
+    private int y;
+    private int e;
+    private int sink;
+    private int newEdgeCount;
+    private int newSize;
 
     void readBipartiteGraph() {
+
         // Läs antal hörn och kanter
-        int x = io.getInt();
-        int y = io.getInt();
-        int e = io.getInt();
+        x = io.getInt();
+        y = io.getInt();
+        e = io.getInt();
+
+        xArray = new int[x];
+        yArray = new int[y];
+
+        newSize = x + y + 2; // source and sink
+        sink = x + y + 1;
+        newEdgeCount = x + y + e;
 
         // Läs in kanterna
         for (int i = 0; i < e; ++i) {
             int a = io.getInt();
             int b = io.getInt();
+
+            xArray[i] = a;
+            yArray[i] = b;
         }
     }
 
 
     void writeFlowGraph() {
-        int v = 23, e = 0, s = 1, t = 2;
-
         // Skriv ut antal hörn och kanter samt källa och sänka
-        io.println(v);
-        io.println(s + " " + t);
-        io.println(e);
+        io.println(newSize);
+        io.println(1 + " " + (sink + 1));
+        io.println(newEdgeCount);
+
+        for (int i = 0; i < x; i++) {
+            io.println("1 " + (xArray[i]+1) + " 1");
+        }
+
         for (int i = 0; i < e; ++i) {
-            int a = 1, b = 2, c = 17;
+            int a = xArray[i] + 1, b = yArray[i] + 1, c = 1;
             // Kant från a till b med kapacitet c
             io.println(a + " " + b + " " + c);
         }
+
+        for (int i = 0; i < x; i++) {
+            io.println((yArray[i]+1) + " " + sink+1);
+        }
+
         // Var noggrann med att flusha utdata när flödesgrafen skrivits ut!
         io.flush();
 
