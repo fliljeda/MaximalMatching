@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Exempel på in- och utdatahantering för maxflödeslabben i kursen
  * ADK.
@@ -19,6 +21,10 @@ public class BipRed {
     private int sink;
     private int newEdgeCount;
     private int newSize;
+
+    //Flow
+    private int numberofedges = 0;
+    ArrayList<String> printstrings;
 
     void readBipartiteGraph() {
 
@@ -82,28 +88,33 @@ public class BipRed {
         int t = io.getInt();
         int totflow = io.getInt();
         int e = io.getInt();
+        printstrings = new ArrayList<String>(10000);
 
         for (int i = 0; i < e; ++i) {
             // Flöde f från a till b
-            int a = io.getInt();
-            int b = io.getInt();
+            int x = io.getInt();
+            int y = io.getInt();
             int f = io.getInt();
+            if(x == 1 || y == sink+1 || f == 0) {
+                continue;
+            }
+            numberofedges++;
+            printstrings.add(x + " " + y);
         }
     }
 
 
     void writeBipMatchSolution() {
-        int x = 17, y = 4711, maxMatch = 0;
 
         // Skriv ut antal hörn och storleken på matchningen
         io.println(x + " " + y);
-        io.println(maxMatch);
+        io.println(numberofedges);
 
-        for (int i = 0; i < maxMatch; ++i) {
-            int a = 5, b = 2323;
+        for (int i = 0; i < numberofedges; ++i) {
             // Kant mellan a och b ingår i vår matchningslösning
-            io.println(a + " " + b);
+            io.println(printstrings.get(i));
         }
+        io.flush();
 
     }
 
