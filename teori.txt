@@ -1,0 +1,25 @@
+Labb 3 teori
+
+@@@@@@@Uppgift 1:@@@@@@@@@@@@
+För att hitta det maximala flödet efter att kortaste stigen har valts så tar det högst |V||E| varv. Det
+viktiga är nu att hitta hur vi hittar den kortaste stigen samt hur vi når kanterna i en grannlista vs en grannmatris.
+
+I en grannlista tar att hitta den minsta stigen O(|E|) så därför blir hela algon O(|V||E|^2). O(n*m^2).
+I en grannmatris tar att hitta minsta stigen O(|V|^2) så därför blir hela algon O(|E||V|^3). O(m*n^3).
+
+Sedan för m=O(n)
+Grannlista: O(n^3)
+Grannmatris: O(n^4)
+Alltså är Grannlista snabbare när grafen är gles
+
+@@@@@@@Uppgift 2:@@@@@@@@@@@@
+Eftersom i restflödesgrafen kommer man kunna traversera kanter åt andra hållet och vissa kanter kommer inte kunna
+transformeras och därför kan den kortaste vägen ibland bli fler än tre.
+
+@@@@@@@Uppgift 3:@@@@@@@@@@@@
+När ford fulkerson använder en graf som bara har heltalskapaciteter så kommer endast flöden att adderas med dessa
+kapaciteter som är heltal och därför kommer flödet att bli ett heltal.
+
+Om alla kapaciteter blir 2 kommer det inte bli någon skillnad eftersom alla hörn kommer fyllas på samma sätt.
+Om det finns vissa hörn som har olika kapacitet kan det leda till att matchningsproblemet inte löses.
+Flödet kommer blir större om man ökar kapaciteten.
