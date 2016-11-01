@@ -24,37 +24,38 @@ public class BipRed {
     private int finalEdges = 0; //Edges for solution
     private int actualXsize = 0; //will differ from input since vertices can have no edges
     ArrayList<String> solutionPrintStrings;
-    HashMap<Integer,Vertex> edgeMap;
+    HashMap<Integer, Vertex> edgeMap;
     HashSet<Integer> xSet;
     HashSet<Integer> ySet;
-    
-    private class Vertex{
+
+    private class Vertex {
         private int id;
         ArrayList<Integer> edges;
-        Vertex(int id){
+
+        Vertex(int id) {
             this.id = id;
             edges = new ArrayList<Integer>();
         }
-        
-        public void addEdge(int edge){
+
+        public void addEdge(int edge) {
             edges.add(edge);
         }
-        
-        public String[] getEdges(){
+
+        public String[] getEdges() {
             int size = edges.size();
             String[] strings = new String[size];
-            for(int i = 0; i < strings.length; i++){
-                strings[i] = (id+1) + " " +  (edges.get(i)+1);
+            for (int i = 0; i < strings.length; i++) {
+                strings[i] = (id + 1) + " " + (edges.get(i) + 1);
             }
             return strings;
         }
-        
+
     }
 
     void readBipartiteGraph() {
-        edgeMap = new HashMap<Integer,Vertex>();
+        edgeMap = new HashMap<Integer, Vertex>();
         //xSet = new HashSet<Integer>();
-        ySet = new HashSet<Integer>();        
+        ySet = new HashSet<Integer>();
         // Läs antal hörn och kanter
         x = io.getInt();
         y = io.getInt();
@@ -62,8 +63,6 @@ public class BipRed {
         size = x + y + 2; //plus source and sink
         source = 1;
         sink = x + y + 2; //source pushes all by 1 and sink is +1
-        
-
 
 
         Vertex tempv;
@@ -72,16 +71,16 @@ public class BipRed {
         for (int i = 0; i < e; ++i) {
             int a = io.getInt(); //make up for inserted source
             int b = io.getInt();
-        //    xSet.add(a);
+            //    xSet.add(a);
             ySet.add(b);
-            if(edgeMap.containsKey(a)){ //if it has the vertex already
+            if (edgeMap.containsKey(a)) { //if it has the vertex already
                 tempv = edgeMap.get(a);
                 tempv.addEdge(b);
-            }else{
+            } else {
                 actualXsize++;
                 tempv = new Vertex(a);
                 tempv.addEdge(b);
-                edgeMap.put(a,tempv);
+                edgeMap.put(a, tempv);
             }
             //if((tempv = edgeMap.get(b)) != null){ //Both ways (could be removed)
             //    tempv.addEdge(a);
@@ -105,17 +104,17 @@ public class BipRed {
         io.println(size);
         io.println(source + " " + sink);
         io.println(e + actualXsize + ySet.size()); //edges in bipartite graph plus edges to sink and source
-        for(int xVertex: edgeMap.keySet()){
+        for (int xVertex : edgeMap.keySet()) {
             xVertex++; //add one for source push
-            io.println("1 "+ xVertex + " 1");
+            io.println("1 " + xVertex + " 1");
         }
-        for(int i: edgeMap.keySet()){
+        for (int i : edgeMap.keySet()) {
             String[] strings = edgeMap.get(i).getEdges();
-            for(int y = 0; y < strings.length; y++){
+            for (int y = 0; y < strings.length; y++) {
                 io.println(strings[y] + " 1");
             }
         }
-        for(int yVertex: ySet){
+        for (int yVertex : ySet) {
             yVertex++;
             io.println(yVertex + " " + sink + " 1");
         }
@@ -143,12 +142,12 @@ public class BipRed {
             // Flöde f från a till b
             int x = io.getInt();
             int y = io.getInt();
-            if(x != s && y != t){ //source and sink edges
+            if (x != s && y != t) { //source and sink edges
                 finalEdges++;
-                if(x < y){ //if flow is reversed
-                    solutionPrintStrings.add((x-1) + " " + (y-1));
-                }else{
-                    solutionPrintStrings.add((y-1) + " " + (x-1));
+                if (x < y) { //if flow is reversed
+                    solutionPrintStrings.add((x - 1) + " " + (y - 1));
+                } else {
+                    solutionPrintStrings.add((y - 1) + " " + (x - 1));
                 }
             }
             int f = io.getInt(); //just trigger te flow variable
@@ -162,7 +161,7 @@ public class BipRed {
         io.println(x + " " + y);
         io.println(finalEdges);
 
-        for (String s: solutionPrintStrings) {
+        for (String s : solutionPrintStrings) {
             // Kant mellan a och b ingår i vår matchningslösning
             io.println(s);
         }
