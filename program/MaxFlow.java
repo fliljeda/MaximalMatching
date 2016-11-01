@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class MaxFlow {
 
@@ -61,6 +63,25 @@ public class MaxFlow {
     public MaxFlow() {
         io = new Kattio(System.in, System.out);
         createGraph();
+        BFS();
+    }
+
+    private void BFS() {
+        boolean[] visited = new boolean[numberOfVertices];
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.add(source);
+        while(!queue.isEmpty()) {
+            int polled = queue.poll();
+            if(polled == sink) {
+
+            }
+            ArrayList<Integer> neighbours = adjacencyList.get(polled);
+            for (int i = 0; i < neighbours.size(); i++) {
+                int dest = neighbours.get(i);
+                queue.add(dest);
+                visited[dest] = true;
+            }
+        }
     }
 
     public static void main(String[] args) {
