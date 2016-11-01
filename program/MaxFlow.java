@@ -52,7 +52,7 @@ public class MaxFlow {
             ArrayList<Integer> al = list.get(i);
             System.out.println(" Values:");
             for(int val : al){
-                System.out.print(" " + val);
+                System.out.print(" " + val + " c: " + restCapacity[i][val]);
             }
             System.out.println();
         }
