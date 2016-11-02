@@ -90,7 +90,7 @@ public class MaxFlow {
                 }
             }
         }
-        // TODO: if there isn't any path to sink
+        // TODO: if there isn't any path from source to sink
     }
 
     public static void main(String[] args) {
