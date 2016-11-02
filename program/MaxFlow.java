@@ -13,12 +13,12 @@ public class MaxFlow {
     private int[][] flow = new int[2000][2000];
     private HashMap<Integer, ArrayList<Integer>> adjacencyList;
 
-    public void createGraph() {
+    private void createGraph() {
         numberOfVertices = io.getInt();
         source = io.getInt();
         sink = io.getInt();
         numberOfEdges = io.getInt();
-        adjacencyList = new HashMap<Integer, ArrayList<Integer>>(5000);
+        adjacencyList = new HashMap<>(5000);
 
         for (int i = 0; i < numberOfEdges; i++) {
             int src = io.getInt();
@@ -28,7 +28,7 @@ public class MaxFlow {
             restCapacity[src][dest] = cap;
             ArrayList val = adjacencyList.get(src);
             if (val == null) {
-                adjacencyList.put(src, new ArrayList<Integer>(10));
+                adjacencyList.put(src, new ArrayList<>(10));
                 val = adjacencyList.get(src);
             }
             val.add(dest);
@@ -36,7 +36,7 @@ public class MaxFlow {
         printAdjacencyList(adjacencyList);
     }
 
-    public void printAdjacencyList(HashMap<Integer, ArrayList<Integer>> list) {
+    private void printAdjacencyList(HashMap<Integer, ArrayList<Integer>> list) {
         for (int i : list.keySet()) {
             System.out.print("Key: " + i);
             ArrayList<Integer> al = list.get(i);
@@ -48,7 +48,7 @@ public class MaxFlow {
         }
     }
 
-    public MaxFlow() {
+    private MaxFlow() {
         io = new Kattio(System.in, System.out);
         createGraph();
         BFS();
@@ -64,6 +64,8 @@ public class MaxFlow {
         Arrays.fill(parent, -1);
         parent[source] = source;
         int[] m = new int[numberOfVertices]; // Capacity of path to node
+        m[source] = Integer.MAX_VALUE;
+        // BFS begin
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(source);
         LOOP:
