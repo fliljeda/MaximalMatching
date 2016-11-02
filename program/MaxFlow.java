@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class MaxFlow {
 
@@ -15,15 +12,6 @@ public class MaxFlow {
     private int[][] restCapacity = new int[2000][2000];
     private int[][] flow = new int[2000][2000];
     private HashMap<Integer, ArrayList<Integer>> adjacencyList;
-
-    private class Node {
-        public Node previous;
-        public boolean visited;
-
-        public Node() {
-
-        }
-    }
 
     public void createGraph() {
         numberOfVertices = io.getInt();
@@ -39,7 +27,7 @@ public class MaxFlow {
             capacity[src][dest] = cap;
             restCapacity[src][dest] = cap;
             ArrayList val = adjacencyList.get(src);
-            if(val == null) {
+            if (val == null) {
                 adjacencyList.put(src, new ArrayList<Integer>(10));
                 val = adjacencyList.get(src);
             }
@@ -48,12 +36,12 @@ public class MaxFlow {
         printAdjacencyList(adjacencyList);
     }
 
-    public void printAdjacencyList(HashMap<Integer, ArrayList<Integer>> list){
-        for(int i: list.keySet()){
+    public void printAdjacencyList(HashMap<Integer, ArrayList<Integer>> list) {
+        for (int i : list.keySet()) {
             System.out.print("Key: " + i);
             ArrayList<Integer> al = list.get(i);
             System.out.println(" Values:");
-            for(int val : al){
+            for (int val : al) {
                 System.out.print(" " + val + " c: " + restCapacity[i][val]);
             }
             System.out.println();
@@ -64,24 +52,45 @@ public class MaxFlow {
         io = new Kattio(System.in, System.out);
         createGraph();
         BFS();
+        writeOutput();
+    }
+
+    private void writeOutput() {
+        //TODO: write output
     }
 
     private void BFS() {
-        boolean[] visited = new boolean[numberOfVertices];
-        Queue<Integer> queue = new LinkedList<Integer>();
-        queue.add(source);
-        while(!queue.isEmpty()) {
-            int polled = queue.poll();
-            if(polled == sink) {
-
-            }
-            ArrayList<Integer> neighbours = adjacencyList.get(polled);
-            for (int i = 0; i < neighbours.size(); i++) {
-                int dest = neighbours.get(i);
-                queue.add(dest);
-                visited[dest] = true;
+        int[] parent = new int[numberOfVertices];
+        Arrays.fill(parent, -1);
+        parent[source] = source;
+        int[] m = new int[numberOfVertices]; // Capacity of path to node
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(source);
+        LOOP:
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            ArrayList<Integer> neighbors = adjacencyList.get(u);
+            for (int v : neighbors) {
+                // There is available capacity and v haven't been visited before
+                if (capacity[u][v] > flow[u][v] && parent[v] == -1) {
+                    parent[v] = u;
+                    m[v] = Math.min(m[u], capacity[u][v] - flow[u][v]);
+                    if (v != sink)
+                        queue.offer(v);
+                    else {
+                        // Backtrack search and write flow
+                        while (parent[v] != v) {
+                            u = parent[v];
+                            flow[u][v] += m[sink];
+                            flow[v][u] -= m[sink];
+                            v = u;
+                        }
+                        break LOOP;
+                    }
+                }
             }
         }
+        // TODO: if there isn't any path to sink
     }
 
     public static void main(String[] args) {
