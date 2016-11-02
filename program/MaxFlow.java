@@ -26,7 +26,7 @@ public class MaxFlow {
             int cap = io.getInt();
             capacity[src][dest] = cap;
             restCapacity[src][dest] = cap;
-            ArrayList val = adjacencyList.get(src);
+            ArrayList<Integer> val = adjacencyList.get(src);
             if (val == null) {
                 adjacencyList.put(src, new ArrayList<>(10));
                 val = adjacencyList.get(src);
