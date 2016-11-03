@@ -44,7 +44,7 @@ public class BipRed {
             int size = edges.size();
             int[] ints = new int[size];
             for (int i = 0; i < ints.length; i++) {
-                ints[i] = edges.get(i);
+                ints[i] = edges.get(i)+1;
             }
             return ints;
         }
@@ -93,19 +93,19 @@ public class BipRed {
         for (int i : edgeMap.keySet()) {
             int[] neighbors = edgeMap.get(i).getNeighbors();
             for (int y = 0; y < neighbors.length; y++) {
-                maxflow.readEdge(i, neighbors[y], 1);
+                maxflow.readEdge(i+1, neighbors[y], 1);
             }
         }
         for (int yVertex : ySet) {
             yVertex++;
             maxflow.readEdge(yVertex, sink, 1);
         }
+        //maxflow.printlist();
         maxflow.MaxFlowCalc();
     }
 
 
     void readMaxFlowSolution() {
-
         solutionPrintStrings = maxflow.getSolution();
     }
 

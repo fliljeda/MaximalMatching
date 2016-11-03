@@ -8,10 +8,10 @@ public class MaxFlow {
     private int sink;
     private int flowEdges;
 
-    private int[][] capacity = new int[2001][2001];
-    private int[][] flow = new int[2001][2001];
+    private int[][] capacity = new int[5001][5001];
+    private int[][] flow = new int[5001][5001];
     private HashMap<Integer, ArrayList<Integer>> adjacencyList = 
-        new HashMap<Integer, ArrayList<Integer>>(5000);
+        new HashMap<Integer, ArrayList<Integer>>(7000);
 
     public void initGraph(int vertices, int source, int sink, int edges) {
         numberOfVertices = vertices;
@@ -42,7 +42,6 @@ public class MaxFlow {
             }
             val2.add(src);
         }
-        //printlist();
     }
     
     public void printlist(){
