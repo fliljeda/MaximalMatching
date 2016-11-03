@@ -10,7 +10,8 @@ public class MaxFlow {
 
     private int[][] capacity = new int[2001][2001];
     private int[][] flow = new int[2001][2001];
-    private HashMap<Integer, ArrayList<Integer>> adjacencyList;
+    private HashMap<Integer, ArrayList<Integer>> adjacencyList = 
+        new HashMap<Integer, ArrayList<Integer>>(5000);
 
     public void initGraph(int vertices, int source, int sink, int edges) {
         numberOfVertices = vertices;
@@ -24,7 +25,6 @@ public class MaxFlow {
     }
 
     public void readEdge(int src, int dest, int cap) {
-        adjacencyList = new HashMap<Integer, ArrayList<Integer>>(5000);
         capacity[src][dest] = cap;
         ArrayList<Integer> val = adjacencyList.get(src);
         if (val == null) {
@@ -41,6 +41,16 @@ public class MaxFlow {
                 val2 = adjacencyList.get(dest);
             }
             val2.add(src);
+        }
+        //printlist();
+    }
+    
+    public void printlist(){
+        for(int i : adjacencyList.keySet()){
+            ArrayList<Integer> al = adjacencyList.get(i);
+            for(int j : al){
+                System.out.println(i + "->" + j);
+            }
         }
     }
 
