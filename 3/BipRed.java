@@ -25,15 +25,13 @@ public class BipRed {
     private int actualXsize = 0; //will differ from input since vertices can have no edges
     ArrayList<String> solutionPrintStrings;
     HashMap<Integer, Vertex> edgeMap;
-    HashSet<Integer> xSet;
     HashSet<Integer> ySet;
+    MaxFlow maxflow = new MaxFlow();
 
     private class Vertex {
-        private int id;
         ArrayList<Integer> edges;
 
         Vertex(int id) {
-            this.id = id;
             edges = new ArrayList<Integer>();
         }
 
@@ -41,11 +39,12 @@ public class BipRed {
             edges.add(edge);
         }
 
-        public int[] getEdges() {
+
+        public int[] getNeighbors() {
             int size = edges.size();
             int[] ints = new int[size];
             for (int i = 0; i < ints.length; i++) {
-                ints[i] = (id + 1) + " " + (edges.get(i) + 1);
+                ints[i] = edges.get(i);
             }
             return ints;
         }
@@ -54,7 +53,6 @@ public class BipRed {
 
     void readBipartiteGraph() {
         edgeMap = new HashMap<Integer, Vertex>();
-        //xSet = new HashSet<Integer>();
         ySet = new HashSet<Integer>();
         // Läs antal hörn och kanter
         x = io.getInt();
@@ -71,7 +69,6 @@ public class BipRed {
         for (int i = 0; i < e; ++i) {
             int a = io.getInt(); //make up for inserted source
             int b = io.getInt();
-            //    xSet.add(a);
             ySet.add(b);
             if (edgeMap.containsKey(a)) { //if it has the vertex already
                 tempv = edgeMap.get(a);
@@ -82,87 +79,41 @@ public class BipRed {
                 tempv.addEdge(b);
                 edgeMap.put(a, tempv);
             }
-            //if((tempv = edgeMap.get(b)) != null){ //Both ways (could be removed)
-            //    tempv.addEdge(a);
-            //}else{
-            //    tempv = new Vertex(b);
-            //    tempv.addEdge(a);
-            //    edgeMap.put(b,tempv);
-            //}
         }
-//        for(int i: xSet){
-//            String[] strings = edgeMap.get(i).getEdges();
-//            for(int y = 0; y < strings.length; y++){
-//                System.out.println(strings[y] + " 1");
-//            }
-//        }
     }
 
 
     void writeFlowGraph() {
-        // Skriv ut antal hörn och kanter samt källa och sänka
-        io.println(size);
-        io.println(source + " " + sink);
-        io.println(e + actualXsize + ySet.size()); //edges in bipartite graph plus edges to sink and source
+        // Skriv ut antal hörn och kanter samt källa och sänk
+        maxflow.initGraph(size, source, sink, e + actualXsize + ySet.size());
         for (int xVertex : edgeMap.keySet()) {
             xVertex++; //add one for source push
-            maxFlow.readEdge(1,xVertex,1);
-            //io.println("1 " + xVertex + " 1");
+            maxflow.readEdge(1, xVertex, 1);
         }
         for (int i : edgeMap.keySet()) {
-            int[] strings = edgeMap.get(i).getEdges();
-            for (int y = 0; y < strings.length; y++) {
-                maxFlow.readEdge();
-                //io.println(strings[y] + " 1");
+            int[] neighbors = edgeMap.get(i).getNeighbors();
+            for (int y = 0; y < neighbors.length; y++) {
+                maxflow.readEdge(i, neighbors[y], 1);
             }
         }
         for (int yVertex : ySet) {
             yVertex++;
-
-            //io.println(yVertex + " " + sink + " 1");
+            maxflow.readEdge(yVertex, sink, 1);
         }
-
-        // Var noggrann med att flusha utdata när flödesgrafen skrivits ut!
-        io.flush();
-
-        // Debugutskrift
-        //System.err.println("Skickade iväg flödesgrafen");
+        maxflow.MaxFlowCalc();
     }
 
 
     void readMaxFlowSolution() {
-        // Läs in antal hörn, kanter, källa, sänka, och totalt flöde
-        // (Antal hörn, källa och sänka borde vara samma som vi i grafen vi
-        // skickade iväg)
-        int v = io.getInt();
-        int s = io.getInt();
-        int t = io.getInt();
-        int totflow = io.getInt();
-        int e = io.getInt();
-        solutionPrintStrings = new ArrayList<String>();
 
-        for (int i = 0; i < e; ++i) {
-            // Flöde f från a till b
-            int x = io.getInt();
-            int y = io.getInt();
-            if (x != s && y != t) { //source and sink edges
-                finalEdges++;
-                if (x < y) { //if flow is reversed
-                    solutionPrintStrings.add((x - 1) + " " + (y - 1));
-                } else {
-                    solutionPrintStrings.add((y - 1) + " " + (x - 1));
-                }
-            }
-            int f = io.getInt(); //just trigger te flow variable
-        }
+        solutionPrintStrings = maxflow.getSolution();
     }
 
 
     void writeBipMatchSolution() {
-
         // Skriv ut antal hörn och storleken på matchningen
         io.println(x + " " + y);
-        io.println(finalEdges);
+        io.println(maxflow.getFlowEdges());
 
         for (String s : solutionPrintStrings) {
             // Kant mellan a och b ingår i vår matchningslösning
@@ -182,9 +133,6 @@ public class BipRed {
         readMaxFlowSolution();
 
         writeBipMatchSolution();
-
-        // debugutskrift
-        //System.err.println("Bipred avslutar\n");
 
         // Kom ihåg att stänga ner Kattio-klassen
         io.close();
