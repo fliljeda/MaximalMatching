@@ -107,8 +107,8 @@ public class MaxFlow {
         if (adjacencyList.get(source) == null) {
             return false;
         }
-        int[] parent = new int[numberOfVertices + 1];
-        parent[source] = source;
+        int[] path = new int[numberOfVertices + 1];
+        path[source] = source;
         int[] m = new int[numberOfVertices + 1]; // Capacity of path to node
         m[source] = Integer.MAX_VALUE;
         // BFS begin
@@ -122,15 +122,15 @@ public class MaxFlow {
             }
             for (int v : neighbors.keySet()) {
                 // There is available capacity and v haven't been visited before
-                if (getCap(u, v) > getFlow(u, v) && parent[v] == 0) {
-                    parent[v] = u;
+                if (getCap(u, v) > getFlow(u, v) && path[v] == 0) {
+                    path[v] = u;
                     m[v] = Math.min(m[u], getCap(u, v) - getFlow(u, v));
                     if (v != sink)
                         queue.offer(v);
                     else {
                         // Backtrack search and write flow
-                        while (parent[v] != v) {
-                            u = parent[v];
+                        while (path[v] != v) {
+                            u = path[v];
                             addFlow(u, v, m[sink]);
                             addFlow(v, u, -m[sink]);
                             v = u;
