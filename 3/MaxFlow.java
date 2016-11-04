@@ -42,7 +42,7 @@ public class MaxFlow {
         }
         val.put(dest, new Edge(dest, cap, 0));
 
-        // FREDRIK: Added opposite edges also
+        // Add edges in the opposite direction
         if (src != source && dest != sink) {
             HashMap<Integer, Edge> val2 = adjacencyList.get(dest);
             if (val2 == null) {
@@ -57,7 +57,7 @@ public class MaxFlow {
     }
 
     public void MaxFlowCalc() {
-        while (BFS()) ; //FREDRIK:loop until we cant find a path
+        while (BFS()) ; // Loop until we cant find a path
     }
 
     public ArrayList<String> getSolution() {
