@@ -2,16 +2,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/**
- * Exempel på in- och utdatahantering för maxflödeslabben i kursen
- * ADK.
- * <p>
- * Använder Kattio.java för in- och utläsning.
- * Se http://kattis.csc.kth.se/doc/javaio
- *
- * @author: Per Austrin
- */
-
 public class BipRed {
 
     private Kattio io;
@@ -21,7 +11,6 @@ public class BipRed {
     private int source;
     private int sink;
     private int size;
-    private int finalEdges = 0; //Edges for solution
     private int actualXsize = 0; //will differ from input since vertices can have no edges
     ArrayList<String> solutionPrintStrings;
     HashMap<Integer, Vertex> edgeMap;
@@ -100,7 +89,6 @@ public class BipRed {
             yVertex++;
             maxflow.readEdge(yVertex, sink, 1);
         }
-        //maxflow.printlist();
         maxflow.MaxFlowCalc();
     }
 
@@ -134,7 +122,6 @@ public class BipRed {
 
         writeBipMatchSolution();
 
-        // Kom ihåg att stänga ner Kattio-klassen
         io.close();
     }
 

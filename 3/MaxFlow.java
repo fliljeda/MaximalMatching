@@ -8,14 +8,15 @@ public class MaxFlow {
     private int sink;
     private int flowEdges;
 
-    private HashMap<Integer, HashMap<Integer,Edge>> adjacencyList = 
-        new HashMap<Integer, HashMap<Integer,Edge>>(7000);
-    
-    private class Edge{
+    private HashMap<Integer, HashMap<Integer, Edge>> adjacencyList =
+            new HashMap<Integer, HashMap<Integer, Edge>>(7000);
+
+    private class Edge {
         public int id = 0;
         public int cap = 0;
         public int flow = 0;
-        public Edge(int id, int cap, int flow){
+
+        public Edge(int id, int cap, int flow) {
             this.id = id;
             this.cap = cap;
             this.flow = flow;
@@ -36,29 +37,19 @@ public class MaxFlow {
     public void readEdge(int src, int dest, int cap) {
         HashMap<Integer, Edge> val = adjacencyList.get(src);
         if (val == null) {
-            adjacencyList.put(src, new HashMap<Integer,Edge>(10));
+            adjacencyList.put(src, new HashMap<Integer, Edge>(10));
             val = adjacencyList.get(src);
         }
-        val.put(dest, new Edge(dest,cap,0));
+        val.put(dest, new Edge(dest, cap, 0));
 
         // FREDRIK: Added opposite edges also
         if (src != source && dest != sink) {
-            HashMap<Integer,Edge> val2 = adjacencyList.get(dest);
+            HashMap<Integer, Edge> val2 = adjacencyList.get(dest);
             if (val2 == null) {
-                adjacencyList.put(dest, new HashMap<Integer,Edge>(10));
+                adjacencyList.put(dest, new HashMap<Integer, Edge>(10));
                 val2 = adjacencyList.get(dest);
             }
-            val2.put(src, new Edge(src,0,0));
-        }
-    }
-    
-    public void printlist(){
-        for(int i : adjacencyList.keySet()){
-            HashMap<Integer,Edge> al = adjacencyList.get(i);
-            for(int j : al.keySet()){
-                System.out.println(i + "->" + j + " |c: " + al.get(j).cap);
-            }
-            System.out.println("-------------");
+            val2.put(src, new Edge(src, 0, 0));
         }
     }
 
@@ -71,15 +62,15 @@ public class MaxFlow {
 
     public ArrayList<String> getSolution() {
         ArrayList<String> res = new ArrayList<String>(numberOfEdges);
-        for (int i: adjacencyList.keySet()) {
-            for (int j: adjacencyList.get(i).keySet()) {
+        for (int i : adjacencyList.keySet()) {
+            for (int j : adjacencyList.get(i).keySet()) {
 
                 if (i == source || j == source)
                     continue;
                 if (i == sink || j == sink)
                     continue;
 
-                if (getFlow(i,j) > 0) {
+                if (getFlow(i, j) > 0) {
                     flowEdges++;
                     res.add((i - 1) + " " + (j - 1));
                 }
@@ -87,25 +78,27 @@ public class MaxFlow {
         }
         return res;
     }
-    
+
     /*Gets capacity of edge*/
-    public int getCap(int src, int dest){
+    public int getCap(int src, int dest) {
         return adjacencyList.get(src).get(dest).cap;
-        
+
     }
+
     /*Gets flow of edge*/
-    public int getFlow(int src, int dest){
+    public int getFlow(int src, int dest) {
         return adjacencyList.get(src).get(dest).flow;
     }
-    
+
     /*Adds capacity to the given edge*/
-    public void addCap(int src, int dest, int add){
-        if(src == sink || dest == source)return;
+    public void addCap(int src, int dest, int add) {
+        if (src == sink || dest == source) return;
         adjacencyList.get(src).get(dest).cap += add;
     }
+
     /*Adds flow to the given edge*/
-    public void addFlow(int src, int dest, int add){
-        if(src == sink || dest == source)return;
+    public void addFlow(int src, int dest, int add) {
+        if (src == sink || dest == source) return;
         adjacencyList.get(src).get(dest).flow += add;
     }
 
@@ -123,23 +116,23 @@ public class MaxFlow {
         queue.offer(source);
         while (!queue.isEmpty()) {
             int u = queue.poll();
-            HashMap<Integer,Edge> neighbors = adjacencyList.get(u);
+            HashMap<Integer, Edge> neighbors = adjacencyList.get(u);
             if (neighbors == null) {
                 continue;
             }
             for (int v : neighbors.keySet()) {
                 // There is available capacity and v haven't been visited before
-                if (getCap(u,v) > getFlow(u,v) && parent[v] == 0) {
+                if (getCap(u, v) > getFlow(u, v) && parent[v] == 0) {
                     parent[v] = u;
-                    m[v] = Math.min(m[u], getCap(u,v) - getFlow(u,v));
+                    m[v] = Math.min(m[u], getCap(u, v) - getFlow(u, v));
                     if (v != sink)
                         queue.offer(v);
                     else {
                         // Backtrack search and write flow
                         while (parent[v] != v) {
                             u = parent[v];
-                            addFlow(u,v,m[sink]);
-                            addFlow(v,u,-m[sink]);
+                            addFlow(u, v, m[sink]);
+                            addFlow(v, u, -m[sink]);
                             v = u;
                         }
                         return true;
