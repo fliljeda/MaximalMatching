@@ -11,7 +11,7 @@ public class BipRed {
     private int source;
     private int sink;
     private int size;
-    private int actualXsize = 0; //will differ from input since vertices can have no edges
+    private int actualXsize = 0; // will differ from input since vertices can have no edges
     private ArrayList<String> solutionPrintStrings;
     private HashMap<Integer, Vertex> edgeMap;
     private HashSet<Integer> ySet;
@@ -28,7 +28,6 @@ public class BipRed {
             edges.add(edge);
         }
 
-
         public int[] getNeighbors() {
             int size = edges.size();
             int[] ints = new int[size];
@@ -37,7 +36,6 @@ public class BipRed {
             }
             return ints;
         }
-
     }
 
     /*
@@ -50,12 +48,11 @@ public class BipRed {
         x = io.getInt();
         y = io.getInt();
         e = io.getInt();
-        size = x + y + 2; //plus source and sink
+        size = x + y + 2; // plus source and sink
         source = 1;
-        sink = x + y + 2; //source pushes all by 1 and sink is +1
+        sink = x + y + 2; // source pushes all by 1 and sink is +1
 
         Vertex tempv;
-        int o = 0;
         // Läs in kanterna
         for (int i = 0; i < e; ++i) {
             int a = io.getInt(); //make up for inserted source
@@ -77,22 +74,30 @@ public class BipRed {
         Add Source and Sink to Bipartite graph and send to MaxFlow
      */
     private void writeFlowGraph() {
-        // Skriv ut antal hörn och kanter samt källa och sänk
+
         maxflow.initGraph(size, source, sink, e + actualXsize + ySet.size());
+
+        // from source to left side
         for (int xVertex : edgeMap.keySet()) {
             xVertex++; //add one for source push
             maxflow.readEdge(1, xVertex, 1);
         }
+
+        // from left to right
         for (int i : edgeMap.keySet()) {
             int[] neighbors = edgeMap.get(i).getNeighbors();
             for (int y = 0; y < neighbors.length; y++) {
                 maxflow.readEdge(i + 1, neighbors[y], 1);
             }
         }
+
+        // from right to sink
         for (int yVertex : ySet) {
             yVertex++;
             maxflow.readEdge(yVertex, sink, 1);
         }
+
+        // start MaxFlow
         maxflow.MaxFlowCalc();
     }
 

@@ -36,6 +36,7 @@ public class MaxFlow {
 
     public void readEdge(int src, int dest, int cap) {
         HashMap<Integer, Edge> val = adjacencyList.get(src);
+
         if (val == null) {
             adjacencyList.put(src, new HashMap<Integer, Edge>(10));
             val = adjacencyList.get(src);
@@ -107,7 +108,6 @@ public class MaxFlow {
             return false;
         }
         int[] parent = new int[numberOfVertices + 1];
-        //Arrays.fill(parent, -1); //FREDRIK:efficiency use 0 (we go from 1 to n)
         parent[source] = source;
         int[] m = new int[numberOfVertices + 1]; // Capacity of path to node
         m[source] = Integer.MAX_VALUE;
