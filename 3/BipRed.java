@@ -12,10 +12,10 @@ public class BipRed {
     private int sink;
     private int size;
     private int actualXsize = 0; //will differ from input since vertices can have no edges
-    ArrayList<String> solutionPrintStrings;
-    HashMap<Integer, Vertex> edgeMap;
-    HashSet<Integer> ySet;
-    MaxFlow maxflow = new MaxFlow();
+    private ArrayList<String> solutionPrintStrings;
+    private HashMap<Integer, Vertex> edgeMap;
+    private HashSet<Integer> ySet;
+    private MaxFlow maxflow = new MaxFlow();
 
     private class Vertex {
         ArrayList<Integer> edges;
@@ -39,8 +39,10 @@ public class BipRed {
         }
 
     }
-
-    void readBipartiteGraph() {
+     /*
+        Reads input from Kattis and creates an internal data structure to represent the Graph
+      */
+    private void readBipartiteGraph() {
         edgeMap = new HashMap<Integer, Vertex>();
         ySet = new HashSet<Integer>();
         // Läs antal hörn och kanter
@@ -50,7 +52,6 @@ public class BipRed {
         size = x + y + 2; //plus source and sink
         source = 1;
         sink = x + y + 2; //source pushes all by 1 and sink is +1
-
 
         Vertex tempv;
         int o = 0;
@@ -71,8 +72,10 @@ public class BipRed {
         }
     }
 
-
-    void writeFlowGraph() {
+    /*
+        Add Source and Sink to Bipartite graph and send to MaxFlow
+     */
+    private void writeFlowGraph() {
         // Skriv ut antal hörn och kanter samt källa och sänk
         maxflow.initGraph(size, source, sink, e + actualXsize + ySet.size());
         for (int xVertex : edgeMap.keySet()) {
@@ -92,13 +95,17 @@ public class BipRed {
         maxflow.MaxFlowCalc();
     }
 
-
-    void readMaxFlowSolution() {
+    /*
+        Read MaxFlow solution
+     */
+    private void readMaxFlowSolution() {
         solutionPrintStrings = maxflow.getSolution();
     }
 
-
-    void writeBipMatchSolution() {
+    /*
+        Write MaxFlow solution to Kattis
+     */
+    private void writeBipMatchSolution() {
         // Skriv ut antal hörn och storleken på matchningen
         io.println(x + " " + y);
         io.println(maxflow.getFlowEdges());
@@ -111,16 +118,16 @@ public class BipRed {
 
     }
 
-    BipRed() {
+    public BipRed() {
         io = new Kattio(System.in, System.out);
 
-        readBipartiteGraph();
+        readBipartiteGraph(); // read input from Kattis
 
-        writeFlowGraph();
+        writeFlowGraph(); // add source and sink to graph and send to MaxFlow
 
-        readMaxFlowSolution();
+        readMaxFlowSolution(); // read MaxFlow solution
 
-        writeBipMatchSolution();
+        writeBipMatchSolution(); // write output to Kattis
 
         io.close();
     }
